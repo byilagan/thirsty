@@ -11,6 +11,9 @@ import { getDrinkIngredientsFromData, getUniquePastelColors, normalizeChartData}
 import { PieChart } from "@components/Chart";
 import IngredientsList from "@components/IngredientsLegend"; 
 
+// Types
+import { IDrink } from "@types";
+
 type DrinkDetailsViewProps = {
   params: {
     id: string
@@ -19,7 +22,20 @@ type DrinkDetailsViewProps = {
 
 const DrinkDetailsView = async ({ params }: DrinkDetailsViewProps) => {
   const { id } = params; 
-  const { drinks: [ drinkData ] } = await getDrinkById(id);
+  let drinkData: IDrink = {
+    idDrink: "",
+    strDrink: "", 
+    strDrinkThumb: "", 
+    strInstructions: "", 
+    dateModified: ""
+  };
+
+  try {
+    const { drinks: [ data ] } = await getDrinkById(id);
+    drinkData = data;
+  } catch (e) {
+    console.error(e); 
+  }
 
   const {
     strDrink,
@@ -48,9 +64,9 @@ const DrinkDetailsView = async ({ params }: DrinkDetailsViewProps) => {
         <p className="mx-[20px] mt-[30px] text-[17px] font-bold">
           Ingredients:
         </p>
-        <div className="flex justify-between">
+        <div className="flex justify-between max-[400px]:flex-col">
           <IngredientsList data={withColors}/>
-          <PieChart className="m-[20px]" data={normalized}/>
+          <PieChart className="m-[20px] max-[400px]:m-auto" data={normalized}/>
         </div>
         <p className="m-[20px] mt-[10px] text-[17px]">{strInstructions}</p>
       </div>

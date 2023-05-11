@@ -22,10 +22,17 @@ export default function DrinksView () {
   const [search, setSearch] = useState(""); 
   const [data, setData] = useState<IDrink[]>([]);
 
+  // Debounced api call to avoid too many requests
   const getDrinks = useCallback(debounce(async (searchStr) => {
     setLoading(true); 
-    const {drinks} = await getDrinksByName(searchStr); 
-    setData(drinks); 
+
+    try {
+      const {drinks} = await getDrinksByName(searchStr); 
+      setData(drinks); 
+    } catch (e) {
+      console.error(e); 
+    }
+
     setLoading(false); 
   },300),[])
 
