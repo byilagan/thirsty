@@ -10,7 +10,7 @@ type DrinkListProps = {
 
 const DrinkList = ({ drinks }: DrinkListProps) => {
   return (
-    <ul>
+    <ul className="h-[calc(100vh-136px)] overflow-auto">
       {drinks?.map((d, i) => <DrinkListItem key={i} drink={d}/>)}
     </ul>
   )
